@@ -106,11 +106,10 @@ services:
     environment:
       MINIO_ROOT_USER: space
       MINIO_ROOT_PASSWORD: miniospace
-      MINIO_ACCESS_KEY: spaceshuttle
-      MINIO_SECRET_KEY: spaceshuttle
+      MINIO_ACCESS_KEY: datalake
+      MINIO_SECRET_KEY: datalake
     volumes:
       - ./minio/data1:/data
-
 
   nifi:
     image: apache/nifi:latest
