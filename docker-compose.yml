@@ -22,7 +22,6 @@ services:
     volumes:
       - ./spark/work:/home/user 
       - ./spark/env:/env 
-      - ./util:/util
     deploy:
       resources:
         limits:
@@ -49,7 +48,6 @@ services:
       - 38081:8081
       - 36533:36533
     volumes:
-      - ./util:/util
       - ./spark/work:/home/user 
     environment:
       SPARK_MASTER: spark-master
@@ -59,39 +57,6 @@ services:
       resources:
         limits:
           memory: 1g
-
-  db:
-    image: postgres
-    platform: linux/amd64
-    container_name: db
-    hostname: db
-    environment:
-      POSTGRES_PASSWORD: spacedb
-      POSTGRES_USER: spacedb
-      POSTGRES_DB: spacedb
-    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200 -c wal_level=logical
-    ports:
-      - 15432:5432
-    volumes:
-      - ./postgres/volume:/var/lib/postgresql/data
-      - ./util:/util
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U metabase"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    platform: linux/amd64
-    environment:
-      PGADMIN_DEFAULT_EMAIL: lab-pgadmin4@pgadmin.org
-      PGADMIN_DEFAULT_PASSWORD: spacepg    
-    ports:
-      - "5433:80"
-    depends_on:
-      - db  
 
   minio:
     image: minio/minio:latest
@@ -110,24 +75,36 @@ services:
       MINIO_SECRET_KEY: datalake
     volumes:
       - ./minio/data1:/data
-
-  nifi:
-    image: apache/nifi:latest
+      
+  db:
+    image: postgres
     platform: linux/amd64
-    container_name: nifi
-    hostname: nifi
-    volumes:
-      - ./nifi/util:/util
+    container_name: db
+    hostname: db
     environment:
-      NIFI_WEB_HTTP_PORT: "9090"
-      NIFI_WEB_HTTPS_HOST: "nifi"
-      TZ: "America/Sao_Paulo"
-    command: >
-      sh -c "ln -snf /usr/share/zoneinfo/$$TZ /etc/localtime && echo $$TZ > /etc/timezone"
-    
+      POSTGRES_PASSWORD: spacedb
+      POSTGRES_USER: spacedb
+      POSTGRES_DB: spacedb
+    command: postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200 -c wal_level=logical
     ports:
-      - 49090:9090
-    deploy:
-      resources:
-        limits:
-          memory: 2g
+      - 15432:5432
+    volumes:
+      - ./postgres/volume:/var/lib/postgresql/data
+      - ./util:/util
+    healthcheck:    
+      test: ["CMD-SHELL", "pg_isready -U spacedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    platform: linux/amd64
+    environment:
+      PGADMIN_DEFAULT_EMAIL: lab-pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: spacepg    
+    ports:
+      - "5433:80"
+    depends_on:
+      - db        
