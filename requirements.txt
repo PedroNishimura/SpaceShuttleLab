@@ -1,0 +1,4 @@
+requests
+minio
+psycopg2-binary
+apache-airflow-providers-jdbc

@@ -1,13 +1,18 @@
-FROM python:3.10
+FROM apache/airflow:2.7.2-python3.11
 
- 
-# Create the home directory
-ENV APP_HOME=/home/app
-RUN mkdir -p $APP_HOME
-WORKDIR $APP_HOME
-# 
+USER root
+RUN apt-get update && apt-get install -y \
+    openjdk-11-jdk \
+    build-essential \
+    python3-dev \
+    gcc \
+    libffi-dev \
+    libssl-dev \
+    && apt-get clean
 
-# install
-COPY . $APP_HOME
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
-RUN pip install -e .
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
+ENV PATH $JAVA_HOME/bin:$PATH
+
+USER airflow
+RUN pip install --upgrade pip
+RUN pip install --upgrade apache-airflow-providers-openlineage>=1.8.0
