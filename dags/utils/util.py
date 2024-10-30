@@ -4,6 +4,7 @@ import io
 import requests
 from minio import Minio
 from minio.error import S3Error # type: ignore
+from datetime import datetime
 
 def authToken(session) -> int:
     res = session.post(os.getenv('URL_AUTH_TOKEN'))
@@ -36,6 +37,7 @@ def fetchData(url: str, arrLines: list) -> list:
     return arrObjects
     
 def insertData(arrObjects: list, path: str):
+    dateNow = datetime.now().strftime("%d%m%Y%H%M%S")
     bucket = 'raw'
 
     client = Minio(
@@ -50,7 +52,7 @@ def insertData(arrObjects: list, path: str):
         json_bytes = io.BytesIO(json_data.encode('utf-8'))
 
         try:
-            object_name = f"{path}/{obj['linha']}.json"
+            object_name = f"{path}/{obj['linha']}_{dateNow}.json"
 
             client.put_object(
                 bucket, 

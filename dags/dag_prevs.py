@@ -27,7 +27,8 @@ with DAG(
     'getDataPrev',
     default_args=default_args,
     description='DAG to extract and insert prevision bus data into minio',
-    schedule_interval='@daily'
+    schedule_interval='*/5 * * * *',
+    catchup=False
 ) as dag:
     extract_task = PythonOperator(
         task_id='extract',
