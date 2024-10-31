@@ -107,4 +107,4 @@ services:
     ports:
       - "5433:80"
     depends_on:
-      - db        
+      - db
