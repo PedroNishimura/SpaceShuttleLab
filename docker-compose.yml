@@ -131,10 +131,8 @@ services:
       AIRFLOW__WEBSERVER__SECRET_KEY: '${FERNET_KEY}2'
       AIRFLOW__CORE__LOAD_EXAMPLES: 'True'
       URL_AUTH_TOKEN: ${URL_AUTH_TOKEN}
-      URL_MINIO: ${URL_MINIO}
       MINIO_ACESS_KEY: ${MINIO_ACESS_KEY}
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-      MINIO_BUCKET: ${MINIO_BUCKET}
     volumes:
       - ./dags:/opt/airflow/dags
       - ./requirements.txt:/requirements.txt
