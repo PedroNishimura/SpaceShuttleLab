@@ -14,14 +14,14 @@ default_args = {
 
 def extract():
     url = 'http://api.olhovivo.sptrans.com.br/v2.1/Previsao/Linha?codigoLinha'
-    arrLines = [1726, 2607, 34494, 35375]
+    arrLines = [1726, 2607, 34494, 35375, 33708]
 
     return fetchData(url, arrLines)
 
 def insert(ti):
     arrObjects = ti.xcom_pull(task_ids='extract')
 
-    return insertData(arrObjects, '/prev',)
+    return insertData(arrObjects, '/prev', 'prev')
 
 with DAG(
     'getDataPrev',

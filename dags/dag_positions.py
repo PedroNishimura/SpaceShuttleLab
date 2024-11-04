@@ -13,15 +13,15 @@ default_args = {
 }
 
 def extract():
-    url = 'http://api.olhovivo.sptrans.com.br/v2.1/Posicao/Linha?codigoLinha'
-    arrLines = [1726, 2607, 34494, 35375]
+    url = 'http://api.olhovivo.sptrans.com.br/v2.1/Posicao'
+    arrLines = []
 
     return fetchData(url, arrLines)
 
 def insert(ti):
     arrObjects = ti.xcom_pull(task_ids='extract')
 
-    return insertData(arrObjects, '/position',)
+    return insertData(arrObjects, '/position', 'position')
 
 with DAG(
     'getDataPosition',
@@ -41,3 +41,4 @@ with DAG(
     )
 
 extract_task >> insert_task
+ 
