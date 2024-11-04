@@ -13,10 +13,9 @@ default_args = {
 }
 
 def extract():
-    url = 'http://api.olhovivo.sptrans.com.br/v2.1/Posicao'
-    arrLines = []
-
-    return fetchData(url, arrLines)
+    url = 'http://api.olhovivo.sptrans.com.br/v2.1/Posicao/Linha?codigoLinha'
+    
+    return fetchData(url)
 
 def insert(ti):
     arrObjects = ti.xcom_pull(task_ids='extract')
