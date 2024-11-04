@@ -6,13 +6,15 @@ from minio import Minio
 from minio.error import S3Error # type: ignore
 from datetime import datetime
 
+ARR_LINES = [1726, 2607, 34494, 35375]
+
 def authToken(session) -> int:
     res = session.post(os.getenv('URL_AUTH_TOKEN'))
     
     return res.status_code
 
 
-def fetchData(url: str, arrLines: list) -> list:
+def fetchData(url: str) -> list:
     session = requests.Session()
 
     authRes = authToken(session)
@@ -20,7 +22,7 @@ def fetchData(url: str, arrLines: list) -> list:
     arrObjects = []
 
     if (authRes == 200):
-        for line in arrLines:
+        for line in ARR_LINES:
             res = session.get(f'{url}={line}')
 
             res = res.json()
