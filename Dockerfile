@@ -16,3 +16,6 @@ ENV PATH $JAVA_HOME/bin:$PATH
 USER airflow
 RUN pip install --upgrade pip
 RUN pip install --upgrade apache-airflow-providers-openlineage>=1.8.0
+RUN pip install pyspark
+RUN pip install delta-spark
+RUN pip install apache-airflow-providers-apache-spark

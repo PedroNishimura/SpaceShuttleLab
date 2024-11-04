@@ -20,7 +20,7 @@ def extract():
 def insert(ti):
     arrObjects = ti.xcom_pull(task_ids='extract')
 
-    return insertData(arrObjects, '/prev',)
+    return insertData(arrObjects, '/prev', 'prev')
 
 with DAG(
     'getDataPrev',
