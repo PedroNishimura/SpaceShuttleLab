@@ -14,8 +14,9 @@ default_args = {
 
 def extract():
     url = 'http://api.olhovivo.sptrans.com.br/v2.1/Parada/BuscarParadasPorLinha?codigoLinha'
+    arrLines = [1726, 2607, 34494, 35375]
     
-    return fetchData(url)
+    return fetchData(url, arrLines)
 
 def insert(ti):
     arrObjects = ti.xcom_pull(task_ids='extract')
